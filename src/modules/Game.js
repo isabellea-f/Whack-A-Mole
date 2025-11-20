@@ -72,7 +72,7 @@ export class Game {
     console.log(cell);
 
     //time to live
-    const mole = new Mole(cell, 1500);
+    const mole = new Mole(cell, 1000);
     this._activeMoles.add(mole);
 
     /* miss om utgång utan träff? */
@@ -100,6 +100,8 @@ export class Game {
       hitMole.disappear();
       this._activeMoles.delete(hitMole);
     } else {
+      this.state.misses++;
+      this.updateHud();
     }
     // TODO: om cellen innehåller en aktiv mullvad => poäng; annars öka missar
     // Uppdatera HUD varje gång.
