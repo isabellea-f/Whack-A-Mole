@@ -40,6 +40,7 @@ export class Game {
       this.boardEl.appendChild(cell);
     }
   }
+
   start() {
     if (this.state.running) return;
     this.state.running = true;
@@ -57,13 +58,35 @@ export class Game {
       }
     }, 1000);
 
-    // 2) setInterval eller rekursiva setTimeout: spawn av mullvadar (variera
-    //TTL/frekvens över tid)
+    // if game is running, do nothing
+    //else: call spawnMole
+    this._spawnId = setInterval(() => {
+      if (this.state.running == false) {
+        return;
+      }
+      this.spawnMole();
+    }, 800);
   }
+
   reset() {
     // TODO: städa timers, ta bort aktiva mullvadar, nollställ state och UI
+    clearInterval(this._spawnId);
+    clearInterval(this._tickId);
+    this.state.running = false;
     // Tips: loopa this._activeMoles och kalla .disappear()
+    this._activeMoles.forEach((mole) => {
+      mole.disappear();
+    });
+    this._activeMoles.clear();
+    this.state = {
+      score: 0,
+      misses: 0,
+      timeLeft: this.duration,
+      running: false,
+    };
+    this.updateHud();
   }
+
   spawnMole() {
     //get cells wihout mole
     const emptyCells = [
