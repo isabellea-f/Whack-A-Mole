@@ -47,8 +47,16 @@ export class Game {
     this.state.misses = 0;
     this.state.timeLeft = this.duration;
     this.updateHud();
-    // TODO: implementera spelloop
     // 1) setInterval: nedräkning av timeLeft
+    this._tickId = setInterval(() => {
+      this.state.timeLeft--;
+      this.updateHud();
+
+      if (this.state.timeLeft <= 0) {
+        this.reset();
+      }
+    }, 1000);
+
     // 2) setInterval eller rekursiva setTimeout: spawn av mullvadar (variera
     //TTL/frekvens över tid)
   }
